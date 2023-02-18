@@ -1,3 +1,4 @@
+import { Avatar } from "./Avatar";
 import { Comment } from "./Comment";
 import styles from "./Post.module.css";
 
@@ -12,8 +13,8 @@ function Post({ author, content, role }: PostProps) {
     <article className={styles.post}>
       <header>
         <div className={styles.author}>
-          <img
-            className={styles.avatar}
+          <Avatar
+            outlineBorder
             src="https://github.com/ranieri3232.png"
           />
           <div className={styles.authorInfo}>
