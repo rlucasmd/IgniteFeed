@@ -52,10 +52,20 @@ function Post({ author, content, published_at }: PostProps) {
   }
 
   function deleteComment(content: string) {
-    console.log(`Deletar comentário ${content}`);
+    // console.log(`Deletar comentário ${content}`);
     const newComments = comments.filter((comment) => (comment.content !== content));
-    console.log(newComments);
+    // console.log(newComments);
+    setComments(newComments);
   }
+
+  function handleNewCommentInvalid(event: FormEvent) {
+    const { target } = event;
+    (target as HTMLTextAreaElement)
+      .setCustomValidity("Este campo é obrigatório");
+
+  }
+
+  const isNewCommentEmpty = newCommentText.length === 0;
 
   return (
     <article className={styles.post}>
@@ -101,9 +111,16 @@ function Post({ author, content, published_at }: PostProps) {
           title="comment"
           onChange={(e) => handleNewCommentChange(e)}
           value={newCommentText}
+          required
+          onInvalid={(e) => handleNewCommentInvalid(e)}
         />
         <footer>
-          <button type="submit">Publicar</button>
+          <button
+            type="submit"
+            disabled={isNewCommentEmpty}
+          >
+            Publicar
+          </button>
         </footer>
       </form>
 

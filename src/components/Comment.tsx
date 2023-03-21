@@ -1,4 +1,5 @@
 import { HandsClapping, Trash } from "phosphor-react";
+import { useState } from "react";
 import { Avatar } from "./Avatar";
 import styles from "./Comment.module.css";
 
@@ -16,9 +17,17 @@ interface CommentProps {
 }
 
 function Comment({ content, author, onDeleteComment }: CommentProps) {
+
+  const [likeCount, setLikeCount] = useState(0);
+
   function handleDeleteComment() {
     onDeleteComment(content);
   }
+
+  function handleLikeComment() {
+    setLikeCount(count => count + 1);
+  }
+
   return (
     <div className={styles.comment}>
       <Avatar src={author.avatar_url} />
@@ -41,9 +50,9 @@ function Comment({ content, author, onDeleteComment }: CommentProps) {
           <p>{content}</p>
         </div>
         <footer>
-          <button>
+          <button onClick={handleLikeComment}>
             <HandsClapping size={20} />
-            Aplaudir <span>20</span>
+            Aplaudir <span>{likeCount}</span>
           </button>
         </footer>
       </div>
