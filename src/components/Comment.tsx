@@ -6,7 +6,7 @@ import styles from "./Comment.module.css";
 interface Author {
   avatar_url: string;
   name: string;
-  role?: string;
+  role: string;
 }
 
 interface CommentProps {

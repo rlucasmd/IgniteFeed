@@ -3,7 +3,7 @@ import { Comment } from "./Comment";
 import styles from "./Post.module.css";
 import { format, formatDistanceToNow } from "date-fns";
 import ptBR from "date-fns/locale/pt-BR";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { ChangeEvent, FormEvent, InvalidEvent, useState } from "react";
 
 export interface PostProps {
   id: number;
@@ -20,7 +20,7 @@ interface Content {
 interface Author {
   avatar_url: string;
   name: string;
-  role?: string;
+  role: string;
 }
 
 interface CommentProps {
@@ -42,6 +42,8 @@ function Post({ author, content, published_at }: PostProps) {
 
 
   function handleNewCommentChange(event: ChangeEvent<HTMLTextAreaElement>) {
+    if (newCommentText.length === 0)
+      event.target.setCustomValidity("");
     setNewCommentText(event.target.value);
   }
 
@@ -52,17 +54,12 @@ function Post({ author, content, published_at }: PostProps) {
   }
 
   function deleteComment(content: string) {
-    // console.log(`Deletar comentário ${content}`);
     const newComments = comments.filter((comment) => (comment.content !== content));
-    // console.log(newComments);
     setComments(newComments);
   }
 
-  function handleNewCommentInvalid(event: FormEvent) {
-    const { target } = event;
-    (target as HTMLTextAreaElement)
-      .setCustomValidity("Este campo é obrigatório");
-
+  function handleNewCommentInvalid(event: InvalidEvent<HTMLTextAreaElement>) {
+    event.target.setCustomValidity("Este campo é obrigatório!");
   }
 
   const isNewCommentEmpty = newCommentText.length === 0;
@@ -109,10 +106,10 @@ function Post({ author, content, published_at }: PostProps) {
         <textarea
           placeholder="Deixe um comentário"
           title="comment"
-          onChange={(e) => handleNewCommentChange(e)}
           value={newCommentText}
+          onChange={handleNewCommentChange}
+          onInvalid={handleNewCommentInvalid}
           required
-          onInvalid={(e) => handleNewCommentInvalid(e)}
         />
         <footer>
           <button
